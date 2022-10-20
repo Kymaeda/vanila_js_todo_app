@@ -9,7 +9,6 @@ const onClickAdd = () => {
   const div = document.createElement("div");
   div.className = "list-row";
   li.appendChild(div);
-  console.log(li);
 
   const p = document.createElement("p");
   p.className = "task-name";
@@ -18,10 +17,17 @@ const onClickAdd = () => {
 
   const completeBtn = document.createElement("button");
   completeBtn.innerHTML = "完了";
-  const DeleteBtn = document.createElement("button");
-  DeleteBtn.innerHTML = "削除";
+  completeBtn.addEventListener("click", () => {
+    alert("completed!!!");
+  });
+  const deleteBtn = document.createElement("button");
+  deleteBtn.innerHTML = "削除";
+  deleteBtn.addEventListener("click", (e) => {
+    const removeLi = e.currentTarget.closest("li");
+    document.getElementById("incompletion-list").removeChild(removeLi);
+  });
   div.appendChild(completeBtn);
-  div.appendChild(DeleteBtn);
+  div.appendChild(deleteBtn);
 
   document.getElementById("incompletion-list").appendChild(li);
 };
