@@ -17,8 +17,19 @@ const onClickAdd = () => {
 
   const completeBtn = document.createElement("button");
   completeBtn.innerHTML = "完了";
-  completeBtn.addEventListener("click", () => {
-    alert("completed!!!");
+  completeBtn.addEventListener("click", (e) => {
+    const moveLi = e.currentTarget.closest("li");
+    console.log(moveLi);
+    document.getElementById("incompletion-list").removeChild(moveLi);
+
+    Array.prototype.forEach.call(moveLi.querySelectorAll("button"), (btn) =>
+      btn.remove()
+    );
+    const returnBtn = document.createElement("button");
+    returnBtn.innerHTML = "戻す";
+    moveLi.querySelector(".list-row").appendChild(returnBtn);
+    console.log(moveLi);
+    document.getElementById("completed-list").appendChild(moveLi);
   });
   const deleteBtn = document.createElement("button");
   deleteBtn.innerHTML = "削除";
