@@ -5,7 +5,6 @@ const onClickAdd = () => {
   document.getElementById("input").value = "";
 
   const li = document.createElement("li");
-
   const div = document.createElement("div");
   div.className = "list-row";
   li.appendChild(div);
@@ -14,26 +13,26 @@ const onClickAdd = () => {
   p.className = "task-name";
   p.innerHTML = inputText;
   div.appendChild(p);
-  addBtns(div);
-
-  document.getElementById("incompletion-list").appendChild(li);
+  addCompleteDeleteBtns(div);
+  addTask("incompletion-list", li);
 };
 
-const removeTask = (elem) => {
-  document.getElementById("incompletion-list").removeChild(elem);
+const addTask = (id, elem) => {
+  document.getElementById(id).appendChild(elem);
 };
 
-const addCompleteEvent = (btn) => {
-  btn.addEventListener("click", (e) => {
-    const moveLi = e.currentTarget.closest("li");
-    removeTask(moveLi);
-    removeBtns(moveLi);
-    addReturnBtn(moveLi);
-    document.getElementById("completed-list").appendChild(moveLi);
-  });
+const removeTask = (id, elem) => {
+  document.getElementById(id).removeChild(elem);
 };
 
-const addBtns = (elem) => {
+const moveTask = (from, to, elem) => {
+  removeTask(from, elem);
+  removeBtns(elem);
+  addReturnBtn(elem);
+  addTask(to, elem);
+};
+
+const addCompleteDeleteBtns = (elem) => {
   const completeBtn = document.createElement("button");
   completeBtn.innerHTML = "完了";
   addCompleteEvent(completeBtn);
@@ -41,8 +40,15 @@ const addBtns = (elem) => {
 
   const deleteBtn = document.createElement("button");
   deleteBtn.innerHTML = "削除";
-  addRemoveEvent(deleteBtn);
+  addDeleteEvent("incompletion-list", deleteBtn);
   elem.appendChild(deleteBtn);
+};
+
+const addReturnBtn = (elem) => {
+  const returnBtn = document.createElement("button");
+  returnBtn.innerHTML = "戻す";
+  elem.querySelector(".list-row").appendChild(returnBtn);
+  addReturnEvent(returnBtn);
 };
 
 const removeBtns = (elem) => {
@@ -51,15 +57,23 @@ const removeBtns = (elem) => {
   );
 };
 
-const addReturnBtn = (elem) => {
-  const returnBtn = document.createElement("button");
-  returnBtn.innerHTML = "戻す";
-  elem.querySelector(".list-row").appendChild(returnBtn);
+const addCompleteEvent = (btn) => {
+  btn.addEventListener("click", (e) => {
+    const moveLi = e.currentTarget.closest("li");
+    moveTask("incompletion-list", "completed-list", moveLi);
+  });
 };
 
-const addRemoveEvent = (btn) => {
+const addDeleteEvent = (id, btn) => {
   btn.addEventListener("click", (e) => {
-    removeTask(e.currentTarget.closest("li"));
+    removeTask(id, e.currentTarget.closest("li"));
+  });
+};
+
+const addReturnEvent = (btn) => {
+  btn.addEventListener("click", (e) => {
+    const moveLi = e.currentTarget.closest("li");
+    moveTask("completed-list", "incompletion-list", moveLi);
   });
 };
 
